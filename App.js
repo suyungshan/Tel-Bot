@@ -2,7 +2,7 @@
 import TelegramBot from "node-telegram-bot-api";
 
 const bot = new TelegramBot("6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY", {
-  polling: false,
+  polling: true,
 });
 
 bot.onText(/\/start/, (msg) => {
