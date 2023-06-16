@@ -1,9 +1,7 @@
 //使用 import (ES6) 的方式導入 node-telegram-bot-api 模組
 import TelegramBot from "node-telegram-bot-api";
 
-const bot = new TelegramBot("6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY", {
-  polling: true,
-});
+const bot = new TelegramBot("6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY");
 
 bot.onText(/\/start/, (msg) => {
   console.log(msg);
