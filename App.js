@@ -1,7 +1,17 @@
 //使用 import (ES6) 的方式導入 node-telegram-bot-api 模組
 import TelegramBot from "node-telegram-bot-api";
+import express from "express";
 
+//使用 express 框架
+const app = express();
 const bot = new TelegramBot("6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY");
+
+app.use(express.json());
+
+app.post(`/YOUR_WEBHOOK_PATH`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
 bot.onText(/\/start/, (msg) => {
   console.log(msg);
@@ -62,4 +72,8 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
     console.error(error);
     bot.sendMessage(chatId, error.message);
   }
+});
+
+app.listen(3000, () => {
+  console.log("Express server is listening on port 3000");
 });
