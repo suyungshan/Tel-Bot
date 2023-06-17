@@ -8,10 +8,13 @@ const bot = new TelegramBot("6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY");
 
 app.use(express.json());
 
-app.post(`/YOUR_WEBHOOK_PATH`, (req, res) => {
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
-});
+app.post(
+  `https://api.telegram.org/bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY/setWebhook?url=https://workout-dngg.onrender.com`,
+  (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+  }
+);
 
 bot.onText(/\/start/, (msg) => {
   console.log(msg);
