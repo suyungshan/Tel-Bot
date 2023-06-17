@@ -1,6 +1,7 @@
 //使用 import (ES6) 的方式導入 node-telegram-bot-api 模組
 import TelegramBot from "node-telegram-bot-api";
 import express from "express";
+import fetch from "node-fetch";
 
 //使用 express 框架
 const app = express();
