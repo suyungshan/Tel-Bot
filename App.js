@@ -7,15 +7,22 @@ import fetch from "node-fetch";
 const app = express();
 const bot = new TelegramBot("6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY");
 
+//使用 setWebHook 告訴 telegram 說如果有新的資訊(例如用戶傳送訊息)，則將該動作資訊傳遞到 render 網站(https://workout-dngg.onrender.com/)中的 workout bot 中(bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY)
+bot.setWebHook(
+  "https://workout-dngg.onrender.com/bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY"
+);
+
+//透過 app.use 使用中介軟體（middleware）express.json()，解析請求的 JSON 格式資料。當你的應用程式需要處理 POST 或其他請求中的 JSON 資料時，你可以使用這個中介軟體來解析並提取請求(setWebHook 傳遞過來的請求資訊)中的 JSON 資料給 bot.processUpdate
+//這裡的 express.json() 方法並不需要指定特定的路徑或 URL。它的作用是在整個 Express 應用程式中，無論收到的請求是從哪個路徑發送的，都會對請求的主體進行 JSON 解析。
+//當您在 app.use(express.json()) 中使用這個中間件後，不論是哪個路由處理函數，只要收到的請求主體是 JSON 格式，它都會自動解析並將資料放在 req.body 中供後續處理使用。
 app.use(express.json());
 
+//透過 app.post接收 /bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY/ 所獲取的最新資訊，此時已由 app.use(express.json()); 解析完成並放入 req.body 中，因此將 req.body 傳入 bot.processUpdate() 給 bot 的其他 method 使用
+//同時透過 res.sendStatus(200) 回傳 status 200(成功)給 Telegram，表示已成功接收和處理更新，不然 telegram 因沒收到回應，會一直發送詢問
 app.post(`/bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY/`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
-bot.setWebHook(
-  "https://workout-dngg.onrender.com/bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY"
-);
 
 bot.onText(/\/start/, (msg) => {
   console.log(msg);
@@ -78,6 +85,6 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("Express server is listening on port 3000");
-});
+// app.listen(3000, () => {
+//   console.log("Express server is listening on port 3000");
+// });
