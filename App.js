@@ -85,6 +85,6 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
   }
 });
 
-// app.listen(3000, () => {
-//   console.log("Express server is listening on port 3000");
-// });
+app.listen(3000, () => {
+  console.log("Express server is listening on port 3000");
+});
