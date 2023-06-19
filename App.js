@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 
 //使用 express 框架
 const app = express();
-const bot = new TelegramBot("TELEGRAM_BOT_TOKEN");
+const bot = new TelegramBot(`${TELEGRAM_BOT_TOKEN}`);
 
 //使用 setWebHook 告訴 telegram 說如果有新的資訊(例如用戶傳送訊息)，則將該動作資訊傳遞到 render 網站(https://workout-dngg.onrender.com/)中的 workout bot 中(bot6072177457:AAHSnFucxpr3lBt4QX758s-bSK3m5b_n_CY)
 bot.setWebHook(`https://workout-dngg.onrender.com/bot${TELEGRAM_BOT_TOKEN}`);
