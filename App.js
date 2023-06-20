@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 
 const app = express();
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
-const renderUrl = "https://workout-dngg.onrender.com";
+const renderUrl = "https://workouttest.onrender.com";
 const airtableUrl = "https://api.airtable.com/v0";
 const gridViewNumber = 20;
 
