@@ -18,35 +18,6 @@ app.post(`/bot${process.env.TELEGRAM_BOT_TOKEN}/`, (req, res) => {
   res.sendStatus(200);
 });
 
-const keyboards = () => {
-  const bodyl_inline_keyboard = [
-    [
-      { text: "Shoulder", callback_data: "shoulder" },
-      { text: "Arm", callback_data: "arm" },
-    ],
-    [
-      { text: "Back", callback_data: "back" },
-      { text: "Legs", callback_data: "legs" },
-    ],
-    [
-      { text: "Core", callback_data: "core" },
-      { text: "Chest", callback_data: "chest" },
-    ],
-  ];
-
-  const InlineKeyboardMarkup = {
-    inline_keyboard: bodyl_inline_keyboard,
-  };
-  const payload = {
-    method: "sendMessage",
-    chat_id: msg.chat.id,
-    text: "想練什麼部位呢?",
-    reply_markup: JSON.stringify(InlineKeyboardMarkup),
-  };
-  start(payload);
-};
-keyboards();
-
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const message =
@@ -69,6 +40,50 @@ bot.onText(/\/start/, (msg) => {
   const bodyInlineKeyboard = { reply_markup: { inline_keyboard: keyboard } };
 
   bot.sendMessage(chatId, message, bodyInlineKeyboard);
+});
+
+bot.on("callback_query", async (query) => {
+  const chatId = query.message.chat.id;
+  const data = query.data; // 點擊按鈕時傳遞的資料
+
+  try {
+    const response = await fetch(
+      `${airtableUrl}/${process.env.AIRTABLE_BASE_ID}/Workout?maxRecords=12&view=Grid%${gridViewNumber}view`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error({ message: "無法取得運動建議" });
+    }
+    const data = await response.json();
+
+    const matchingRecords = data.records.filter((record) => {
+      const exercisePart = record.fields.輸入部位.toLowerCase();
+      return exercisePart === data.toLowerCase();
+    });
+
+    if (matchingRecords.length === 0) {
+      bot.sendMessage(
+        chatId,
+        `很抱歉暫時沒有您希望的運動部位\n請在 /exercise 後方輸入以下的部位名稱進行查詢\n${exerciseBodyParts.join(
+          "\n"
+        )}`
+      );
+    } else {
+      matchingRecords.forEach((data) => {
+        bot.sendMessage(
+          chatId,
+          `根據您的選擇，推薦的運動項目為：${data.fields.運動名稱}\n\n使用方式為：${data.fields["描述（Long Text）"]}`
+        );
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    bot.sendMessage(chatId, error.message);
+  }
 });
 
 bot.onText(/^\/(?!start)(.+)/, async (msg, match) => {
