@@ -1,4 +1,7 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot, {
+  InlineKeyboardButton,
+  InlineKeyboardMarkup,
+} from "node-telegram-bot-api";
 import express from "express";
 import fetch from "node-fetch";
 
@@ -21,11 +24,28 @@ app.post(`/bot${process.env.TELEGRAM_BOT_TOKEN}/`, (req, res) => {
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const message =
-    "歡迎使用健身機器人！請傳入您想鍛鍊的部位，例如：/exercise chest";
-  bot.sendMessage(chatId, message);
+    "歡迎使用健身機器人！請選擇您想鍛鍊的部位，或直接輸入部位，例如：/chest";
+  const keyboard = [
+    [
+      { text: "Shoulder", callback_data: "shoulder" },
+      { text: "Arm", callback_data: "arm" },
+    ],
+    [
+      { text: "Back", callback_data: "back" },
+      { text: "Legs", callback_data: "legs" },
+    ],
+    [
+      { text: "Core", callback_data: "core" },
+      { text: "Chest", callback_data: "chest" },
+    ],
+  ];
+
+  const InlineKeyboard = { reply_markup: { inline_keyboard: keyboard } };
+
+  bot.sendMessage(chatId, message, InlineKeyboard);
 });
 
-bot.onText(/\/exercise (.+)/, async (msg, match) => {
+bot.onText(/\/(.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const bodyPart = match[1];
   try {
@@ -50,7 +70,7 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
     if (matchingRecords.length === 0) {
       bot.sendMessage(
         chatId,
-        `很抱歉暫時沒有您希望的運動部位\n請輸入以下的部位名稱進行查詢\n${exerciseBodyParts.join(
+        `很抱歉暫時沒有您希望的運動部位\n請在 /exercise 後方輸入以下的部位名稱進行查詢\n${exerciseBodyParts.join(
           "\n"
         )}`
       );
