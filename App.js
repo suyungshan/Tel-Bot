@@ -42,7 +42,7 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(chatId, message, InlineKeyboard);
 });
 
-bot.onText(/\/(.+)/, async (msg, match) => {
+bot.onText(/^\/(?!start)(.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const bodyPart = match[1];
   try {
