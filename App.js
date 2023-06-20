@@ -44,7 +44,7 @@ bot.onText(/\/start/, (msg) => {
 
 bot.on("callback_query", async (query) => {
   const chatId = query.message.chat.id;
-  const data = query.data; // 點擊按鈕時傳遞的資料
+  const queryData = query.data; // 點擊按鈕時傳遞的資料
 
   try {
     const response = await fetch(
@@ -62,7 +62,7 @@ bot.on("callback_query", async (query) => {
 
     const matchingRecords = data.records.filter((record) => {
       const exercisePart = record.fields.輸入部位.toLowerCase();
-      return exercisePart === data.toLowerCase();
+      return exercisePart === queryData.toLowerCase();
     });
 
     if (matchingRecords.length === 0) {
