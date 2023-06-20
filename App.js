@@ -4,10 +4,11 @@ import fetch from "node-fetch";
 
 const app = express();
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
+const renderUrl = "https://workout-dngg.onrender.com";
+const airtableUrl = "https://api.airtable.com/v0";
+const gridViewNumber = 20;
 
-bot.setWebHook(
-  `https://workout-dngg.onrender.com/bot${process.env.TELEGRAM_BOT_TOKEN}`
-);
+bot.setWebHook(`${renderUrl}/bot${process.env.TELEGRAM_BOT_TOKEN}`);
 
 app.use(express.json());
 
@@ -28,7 +29,7 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
   const bodyPart = match[1];
   try {
     const response = await fetch(
-      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Workout?maxRecords=12&view=Grid%20view`,
+      `${airtableUrl}/${process.env.AIRTABLE_BASE_ID}/Workout?maxRecords=12&view=Grid%${gridViewNumber}view`,
       {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API}`,
