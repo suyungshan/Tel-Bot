@@ -7,7 +7,7 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
 const renderUrl = "https://workouttest.onrender.com";
 const airtableUrl = "https://api.airtable.com/v0";
 const gridViewNumber = 20;
-const exerciseBodyParts = [Shoulder, Arm, Back, Legs, Core, Chest];
+const exerciseBodyParts = ["Shoulder", "Arm", "Back", "Legs", "Core", "Chest"];
 
 bot.setWebHook(`${renderUrl}/bot${process.env.TELEGRAM_BOT_TOKEN}`);
 
