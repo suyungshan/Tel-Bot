@@ -39,7 +39,7 @@ const keyboards = () => {
   };
   const payload = {
     method: "sendMessage",
-    chat_id: id,
+    chat_id: msg.chat.id,
     text: "想練什麼部位呢?",
     reply_markup: JSON.stringify(InlineKeyboardMarkup),
   };
