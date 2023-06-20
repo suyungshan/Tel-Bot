@@ -7,6 +7,7 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
 const renderUrl = "https://workouttest.onrender.com";
 const airtableUrl = "https://api.airtable.com/v0";
 const gridViewNumber = 20;
+const exerciseBodyParts = [Shoulder, Arm, Back, Legs, Core, Chest];
 
 bot.setWebHook(`${renderUrl}/bot${process.env.TELEGRAM_BOT_TOKEN}`);
 
@@ -47,21 +48,18 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
     });
 
     if (matchingRecords.length === 0) {
-      const message = `很抱歉暫時沒有您希望的運動部位\n請輸入以下的部位名稱進行查詢\nShoulder\nArm\nBack\nLegs\nCore\nChest`;
-      bot.sendMessage(chatId, message);
+      bot.sendMessage(
+        chatId,
+        `很抱歉暫時沒有您希望的運動部位\n請輸入以下的部位名稱進行查詢\n${exerciseBodyParts.join(
+          "\n"
+        )}`
+      );
     } else {
-      const matchingData = matchingRecords.map((data) => {
-        return {
-          id: data.id,
-          運動名稱: data.fields.運動名稱,
-          描述: data.fields["描述（Long Text）"],
-          輸入部位: data.fields.輸入部位,
-        };
-      });
-
-      matchingData.forEach((exercise) => {
-        const message = `根據您的選擇，推薦的運動項目為：${exercise.運動名稱}\n\n使用方式為：${exercise.描述}`;
-        bot.sendMessage(chatId, message);
+      matchingRecords.forEach((data) => {
+        bot.sendMessage(
+          chatId,
+          `根據您的選擇，推薦的運動項目為：${data.fields.運動名稱}\n\n使用方式為：${data.fields["描述（Long Text）"]}`
+        );
       });
     }
   } catch (error) {
