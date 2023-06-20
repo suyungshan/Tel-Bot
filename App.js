@@ -3,13 +3,15 @@ import express from "express";
 import fetch from "node-fetch";
 
 const app = express();
-const bot = new TelegramBot(`${TELEGRAM_BOT_TOKEN}`);
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
 
-bot.setWebHook(`https://workout-dngg.onrender.com/bot${TELEGRAM_BOT_TOKEN}`);
+bot.setWebHook(
+  `https://workout-dngg.onrender.com/bot${process.env.TELEGRAM_BOT_TOKEN}`
+);
 
 app.use(express.json());
 
-app.post(`/bot${TELEGRAM_BOT_TOKEN}/`, (req, res) => {
+app.post(`/bot${process.env.TELEGRAM_BOT_TOKEN}/`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
@@ -26,10 +28,10 @@ bot.onText(/\/exercise (.+)/, async (msg, match) => {
   const bodyPart = match[1];
   try {
     const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Workout?maxRecords=12&view=Grid%20view`,
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Workout?maxRecords=12&view=Grid%20view`,
       {
         headers: {
-          Authorization: `Bearer ${AIRTABLE_API}`,
+          Authorization: `Bearer ${process.env.AIRTABLE_API}`,
         },
       }
     );
