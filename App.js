@@ -18,6 +18,35 @@ app.post(`/bot${process.env.TELEGRAM_BOT_TOKEN}/`, (req, res) => {
   res.sendStatus(200);
 });
 
+const keyboards = () => {
+  const bodyl_inline_keyboard = [
+    [
+      { text: "Shoulder", callback_data: "shoulder" },
+      { text: "Arm", callback_data: "arm" },
+    ],
+    [
+      { text: "Back", callback_data: "back" },
+      { text: "Legs", callback_data: "legs" },
+    ],
+    [
+      { text: "Core", callback_data: "core" },
+      { text: "Chest", callback_data: "chest" },
+    ],
+  ];
+
+  const InlineKeyboardMarkup = {
+    inline_keyboard: bodyl_inline_keyboard,
+  };
+  const payload = {
+    method: "sendMessage",
+    chat_id: id,
+    text: "想練什麼部位呢?",
+    reply_markup: JSON.stringify(InlineKeyboardMarkup),
+  };
+  start(payload);
+};
+keyboards();
+
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const message =
@@ -37,9 +66,9 @@ bot.onText(/\/start/, (msg) => {
     ],
   ];
 
-  const InlineKeyboard = { reply_markup: { inline_keyboard: keyboard } };
+  const bodyInlineKeyboard = { reply_markup: { inline_keyboard: keyboard } };
 
-  bot.sendMessage(chatId, message, InlineKeyboard);
+  bot.sendMessage(chatId, message, bodyInlineKeyboard);
 });
 
 bot.onText(/^\/(?!start)(.+)/, async (msg, match) => {
