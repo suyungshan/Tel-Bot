@@ -64,16 +64,16 @@ bot.onText(/\/start/, (msg) => {
     "歡迎使用健身機器人！請選擇您想鍛鍊的部位，或直接輸入部位，例如：/chest";
   const keyboard = [
     [
-      { text: "Shoulder", callback_data: "/shoulder" },
-      { text: "Arm", callback_data: "/arm" },
+      { text: "Shoulder", callback_data: "shoulder" },
+      { text: "Arm", callback_data: "arm" },
     ],
     [
-      { text: "Back", callback_data: "/back" },
-      { text: "Legs", callback_data: "/legs" },
+      { text: "Back", callback_data: "back" },
+      { text: "Legs", callback_data: "legs" },
     ],
     [
-      { text: "Core", callback_data: "/core" },
-      { text: "Chest", callback_data: "/chest" },
+      { text: "Core", callback_data: "core" },
+      { text: "Chest", callback_data: "chest" },
     ],
   ];
 
